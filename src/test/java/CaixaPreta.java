@@ -34,6 +34,7 @@ public class CaixaPreta {
 		assertEquals(cpf.length(), 11);
 	}
 	
+	
 	@Test
 	public void test_email_user() {
 		Usuario user = new Usuario();
@@ -118,6 +119,55 @@ public class CaixaPreta {
 		float start = user.getMoedas();
 		user.diminuirMoedas();
 		assertTrue(start - user.getMoedas() == 50);
+	}
+	
+	@Test
+	public void test_bet_price_fail() {
+		Usuario user = new Usuario();
+		float start = user.getMoedas();
+		user.diminuirMoedas();
+		assertFalse(start - user.getMoedas() == 10);
+	}
+	
+	//TOPICO 7
+	
+	@Test
+	public void test_bet_allow() {
+		Partida partida = new Partida();
+		partida.liberarApostas();			
+		
+		assertTrue(partida.estaDisponivelReceberApostas());
+		
+	}
+	
+	@Test
+	public void test_bet_denied() {
+		Partida partida = new Partida();	
+		assertFalse(partida.estaDisponivelReceberApostas());
+		
+	}
+	
+	@Test
+	public void test_bet_released() {
+		Partida partida = new Partida();
+		Usuario user = new Usuario();
+		Aposta aposta = new Aposta();
+		user.setCpf("501.220.590-18");
+		user.setEmail("teste@teste.com");
+		user.setPassword("senha123_");
+		float quantMoedas = user.getMoedas();
+		
+		partida.liberarApostas();		
+		
+		int quantGolsVisitante = 3;
+		aposta.setGolsVisitante(quantGolsVisitante);
+		int quantGolsMandante = 1;
+		aposta.setGolsMandate(quantGolsMandante);
+		aposta.setPartida(partida);
+		aposta.setApostador(user);
+		
+		assertTrue(aposta.enviar());
+		
 	}
 	
 }
